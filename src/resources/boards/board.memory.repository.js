@@ -1,4 +1,5 @@
 const Board = require('./board.model');
+const createError = require('http-errors');
 const taskService = require('../tasks/task.service');
 
 let boards = [];
@@ -8,7 +9,11 @@ async function getAllBoards() {
 }
 
 async function getBoard(id) {
-  return boards.find(board => board.id === id);
+  const board = boards.find(item => item.id === id);
+  if (!board) {
+    throw new createError.NotFound(`Board ${id} not found`);
+  }
+  return board;
 }
 
 async function createBoard(board) {
@@ -21,22 +26,17 @@ async function createBoard(board) {
 }
 
 async function updateBoard(id, newBoard) {
-  const board = boards.find(item => item.id === id);
-  if (board) {
-    board.title = newBoard.title;
-    board.columns = newBoard.columns;
-    return board;
-  }
-  return boards;
+  const board = await getBoard(id);
+  board.title = newBoard.title;
+  board.columns = newBoard.columns;
+  return board;
 }
 
 async function removeBoard(id) {
-  const isBoardExist = boards.find(board => board.id === id);
-  if (isBoardExist) {
-    boards = boards.filter(board => board.id !== id);
-    taskService.removeTaskBoard(id);
-  }
-  return boards;
+  const board = await getBoard(id);
+  boards = boards.filter(item => item.id !== id);
+  taskService.removeTaskBoard(id);
+  return board;
 }
 
 module.exports = {

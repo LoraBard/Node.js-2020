@@ -1,3 +1,5 @@
+const createError = require('http-errors');
+
 let tasks = [];
 
 const Task = require('./task.model');
@@ -7,7 +9,13 @@ async function getAllTasks(boardId) {
 }
 
 async function getTaskById(boardId, taskId) {
-  return tasks.find(item => item.boardId === boardId && item.id === taskId);
+  const task = tasks.find(
+    item => item.boardId === boardId && item.id === taskId
+  );
+  if (!task) {
+    throw new createError.NotFound(`Task ${taskId} not found`);
+  }
+  return task;
 }
 
 async function createTask(boardId, task) {
@@ -17,21 +25,17 @@ async function createTask(boardId, task) {
 }
 
 async function updateTask(boardId, taskId, newTask) {
-  tasks.map(task => {
-    if (task.boardId === boardId && task.id === taskId) {
-      task.columnId = newTask.columnId;
-      task.description = newTask.description;
-      task.order = newTask.order;
-      task.title = newTask.title;
-      task.userId = newTask.userId;
-    }
-    return task;
-  });
-  return tasks;
+  const task = await getTaskById(boardId, taskId);
+  task.columnId = newTask.columnId;
+  task.description = newTask.description;
+  task.order = newTask.order;
+  task.title = newTask.title;
+  task.userId = newTask.userId;
+  return task;
 }
 
 async function removeTask(taskID) {
-  tasks = tasks.filter(task => task.id !== taskID);
+  tasks = tasks.filter(item => item.id !== taskID);
   return tasks;
 }
 

@@ -1,3 +1,5 @@
+const createError = require('http-errors');
+
 const User = require('./user.model');
 const taskService = require('../tasks/task.service');
 
@@ -8,7 +10,11 @@ const getAllUsers = async () => {
 };
 
 const getUserById = async id => {
-  return users.find(user => user.id === id);
+  const user = users.find(item => item.id === id);
+  if (!user) {
+    throw new createError.NotFound(`Task ${id} not found`);
+  }
+  return user;
 };
 
 const createUser = async user => {
@@ -18,18 +24,15 @@ const createUser = async user => {
 };
 
 const updateUser = async (id, newUser) => {
-  const user = users.find(item => item.id === id);
-  if (user) {
-    user.name = newUser.name;
-    user.login = newUser.login;
-    user.password = newUser.password;
-    return user;
-  }
-  return users;
+  const user = await getUserById(id);
+  user.name = newUser.name;
+  user.login = newUser.login;
+  user.password = newUser.password;
+  return user;
 };
 
 const removeUser = async id => {
-  const isUserExist = users.find(item => item.id === id);
+  const isUserExist = await getUserById(id);
   if (isUserExist) {
     users = users.filter(user => user.id === id);
     await taskService.nullTaskByUser(id);
