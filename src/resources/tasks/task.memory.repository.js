@@ -1,4 +1,4 @@
-const createError = require('http-errors');
+const createError = require('../../helpers/createError');
 
 let tasks = [];
 
@@ -13,7 +13,7 @@ async function getTaskById(boardId, taskId) {
     item => item.boardId === boardId && item.id === taskId
   );
   if (!task) {
-    throw new createError.NotFound(`Task ${taskId} not found`);
+    throw createError.notFound(`Task ${taskId} not found`);
   }
   return task;
 }

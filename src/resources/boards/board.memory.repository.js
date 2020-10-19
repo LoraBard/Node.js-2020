@@ -1,5 +1,5 @@
 const Board = require('./board.model');
-const createError = require('http-errors');
+const createError = require('../../helpers/createError');
 const taskService = require('../tasks/task.service');
 
 let boards = [];
@@ -11,7 +11,7 @@ async function getAllBoards() {
 async function getBoard(id) {
   const board = boards.find(item => item.id === id);
   if (!board) {
-    throw new createError.NotFound(`Board ${id} not found`);
+    throw createError.notFound(`Board ${id} not found`);
   }
   return board;
 }

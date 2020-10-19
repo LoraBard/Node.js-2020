@@ -42,38 +42,4 @@ const logger = createLogger({
   exitOnError: true
 });
 
-const logParams = (req, res, next) => {
-  const { method, url, body, query } = req;
-
-  const { statusCode } = res;
-  logger.log({
-    level: 'info',
-    message: `url: ${url} query: ${JSON.stringify(
-      query
-    )} body: ${JSON.stringify(body)}`,
-    additional: `method: ${method} status: ${statusCode}`
-  });
-
-  next();
-};
-
-const logError = (error, req, res, next) => {
-  if (error) {
-    const { method, url, body, query } = req;
-    logger.log({
-      level: 'error',
-      message: `url: ${url} query: ${JSON.stringify(
-        query
-      )} body: ${JSON.stringify(body)} error: ${error.message}`,
-      additional: `method: ${method}`
-    });
-    return next(error);
-  }
-  return next();
-};
-
-module.exports = {
-  logger,
-  logParams,
-  logError
-};
+module.exports = logger;

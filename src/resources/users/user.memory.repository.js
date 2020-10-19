@@ -1,4 +1,4 @@
-const createError = require('http-errors');
+const createError = require('../../helpers/createError');
 
 const User = require('./user.model');
 const taskService = require('../tasks/task.service');
@@ -12,7 +12,7 @@ const getAllUsers = async () => {
 const getUserById = async id => {
   const user = users.find(item => item.id === id);
   if (!user) {
-    throw new createError.NotFound(`Task ${id} not found`);
+    throw createError.notFound(`Task ${id} not found`);
   }
   return user;
 };
