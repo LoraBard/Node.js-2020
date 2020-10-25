@@ -6,7 +6,7 @@ const Task = require('./task.model');
 
 const getAllTasks = async (req, res) => {
   const tasks = await tasksService.getAllTasks(req.boardId);
-  return res.status(200).json(tasks);
+  return res.status(200).json(tasks.map(Task.toResponse));
 };
 
 const getTaskById = async (req, res) => {

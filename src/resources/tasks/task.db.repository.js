@@ -6,10 +6,7 @@ async function getAllTasks(boardId) {
 }
 
 async function getTaskById(id) {
-  console.log('BBBB', id);
   const task = await Task.findById(id);
-  console.log('TASK', task);
-  console.log('------');
   return isError(task, id, 'Task');
 }
 

@@ -6,7 +6,7 @@ async function getAllBoards() {
 }
 
 async function getBoard(id) {
-  const board = await Board.findOne({ _id: id });
+  const board = await Board.findById(id);
   return isError(board, id, 'Board');
 }
 

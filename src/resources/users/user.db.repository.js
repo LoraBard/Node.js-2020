@@ -6,7 +6,7 @@ const getAllUsers = async () => {
 };
 
 const getUserById = async id => {
-  const user = await User.findOne({ _id: id });
+  const user = await User.findById(id);
   return isError(user, id, 'User');
 };
 
