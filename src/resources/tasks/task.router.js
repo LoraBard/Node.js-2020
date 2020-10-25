@@ -10,21 +10,17 @@ const getAllTasks = async (req, res) => {
 };
 
 const getTaskById = async (req, res) => {
-  const task = await tasksService.getTaskById(req.boardId, req.params.id);
+  const task = await tasksService.getTaskById(req.params.id);
   return res.status(200).json(Task.toResponse(task));
 };
 
 const updateTaskById = async (req, res) => {
-  const task = await tasksService.updateTask(
-    req.boardId,
-    req.params.id,
-    req.body
-  );
+  const task = await tasksService.updateTask(req.params.id, req.body);
   return res.status(200).json(Task.toResponse(task));
 };
 
 const createTask = async (req, res) => {
-  const task = await tasksService.createTask(req.boardId, req.body);
+  const task = await tasksService.createTask(req.params.boardId, req.body);
   return res.status(200).json(Task.toResponse(task));
 };
 

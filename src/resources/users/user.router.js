@@ -1,6 +1,7 @@
 const { Router } = require('express');
 
 const userService = require('./user.service');
+const taskService = require('../tasks/task.service');
 const catchError = require('../../helpers/catchError');
 const User = require('./user.model');
 
@@ -26,6 +27,7 @@ const updateUserById = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   await userService.removeUser(req.params.id);
+  await taskService.nullTaskByUser(req.params.id);
   return res.status(204).json(`User ${req.params.id} has been deleted`);
 };
 

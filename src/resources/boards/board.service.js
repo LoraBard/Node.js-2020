@@ -1,4 +1,4 @@
-const boardMemory = require('./board.memory.repository');
+const boardMemory = require('./board.db.repository');
 
 const getAllBoards = () => boardMemory.getAllBoards();
 const getBoardById = id => boardMemory.getBoard(id);

@@ -1,6 +1,7 @@
 const { Router } = require('express');
 
 const boardService = require('./board.service');
+const taskService = require('../tasks/task.service');
 const taskRouter = require('../tasks/task.router');
 const catchError = require('../../helpers/catchError');
 const Board = require('./board.model');
@@ -26,6 +27,7 @@ const updateBoardById = async (req, res) => {
 };
 
 const deleteBoard = async (req, res) => {
+  await taskService.removeTaskBoard(req.params.id);
   await boardService.removeBoard(req.params.id);
   return res.status(204).json(`Board  ${req.params.id} has been deleted`);
 };
