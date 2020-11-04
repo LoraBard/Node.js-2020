@@ -4,10 +4,14 @@ const path = require('path');
 const YAML = require('yamljs');
 const userRouter = require('./resources/users/user.router');
 const boardRouter = require('./resources/boards/board.router');
-const handleError = require('./helpers/handleErrors');
+const loginRouter = require('./resources/users/login.router');
+const {
+  handleErrors,
+  logErrors,
+  logParametrs,
+  auth
+} = require('./middlewares');
 const logger = require('./utils/logger');
-const logErrors = require('./helpers/logErrors');
-const logParams = require('./helpers/logParametrs');
 const createError = require('./helpers/createError');
 const exit = process.exit;
 
@@ -26,7 +30,7 @@ const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
 
 app.use(express.json());
 
-app.use(logParams);
+app.use(logParametrs);
 
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
@@ -38,18 +42,20 @@ app.use('/', (req, res, next) => {
   next();
 });
 
-app.use('/users', userRouter);
+app.use('/login', loginRouter);
 
-app.use('/boards', boardRouter);
+app.use('/users', auth, userRouter);
 
-app.use('/users', userRouter);
+app.use('/boards', auth, boardRouter);
 
-app.use('*', (req, res, next) => {
+app.use('/users', auth, userRouter);
+
+app.use('*', auth, (req, res, next) => {
   return next(createError.notFound('Not found'));
 });
 
 app.use(logErrors);
 
-app.use(handleError);
+app.use(handleErrors);
 
 module.exports = app;

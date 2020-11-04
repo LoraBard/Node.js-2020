@@ -2,7 +2,7 @@ const { Router } = require('express');
 
 const userService = require('./user.service');
 const taskService = require('../tasks/task.service');
-const catchError = require('../../helpers/catchError');
+const catchError = require('../../middlewares/catchError');
 const User = require('./user.model');
 
 const getAllUsers = async (req, res) => {

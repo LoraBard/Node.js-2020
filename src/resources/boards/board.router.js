@@ -3,7 +3,8 @@ const { Router } = require('express');
 const boardService = require('./board.service');
 const taskService = require('../tasks/task.service');
 const taskRouter = require('../tasks/task.router');
-const catchError = require('../../helpers/catchError');
+const auth = require('../../middlewares/auth');
+const catchError = require('../../middlewares/catchError');
 const Board = require('./board.model');
 
 const getAllBoards = async (req, res) => {
@@ -40,6 +41,7 @@ module.exports = Router()
   .delete('/:id', catchError(deleteBoard))
   .use(
     '/:boardId/tasks',
+    auth,
     (req, res, next) => {
       req.boardId = req.params.boardId;
       next();

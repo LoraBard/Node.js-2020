@@ -1,7 +1,7 @@
 const { Router } = require('express');
 
 const tasksService = require('./task.service');
-const catchError = require('../../helpers/catchError');
+const catchError = require('../../middlewares/catchError');
 const Task = require('./task.model');
 
 const getAllTasks = async (req, res) => {
