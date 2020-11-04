@@ -10,9 +10,6 @@ const auth = async (req, res, next) => {
       throw createError.unauthorizedError();
     }
     const token = req.header('Authorization').split(' ')[1];
-    if (!token) {
-      throw createError.unauthorizedError();
-    }
     const data = jwt.verify(token, JWT_SECRET_KEY);
     const user = await User.findOne({ _id: data.id, token });
     if (!user) {

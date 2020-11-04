@@ -6,10 +6,10 @@ const generateHash = require('../../utils/generateHash');
 const userSchema = new mongoose.Schema(
   {
     name: String,
+    token: String,
     login: {
       type: String,
-      required: true,
-      unique: true
+      required: true
     },
     password: {
       type: String,
@@ -18,18 +18,15 @@ const userSchema = new mongoose.Schema(
     _id: {
       type: String,
       default: uuid
-    },
-    token: String
+    }
   },
   { versionKey: false }
 );
 
-userSchema.pre('save', async function(next) { //eslint-disable-line
-  const user = this;
-  if (user.isModified('password')) {
-    user.password = await generateHash(user.password);
+userSchema.pre('save', async function() { //eslint-disable-line
+  if (this.isModified('password')) {
+    this.password = await generateHash(this.password);
   }
-  next();
 });
 
 userSchema.statics.toResponse = user => {
